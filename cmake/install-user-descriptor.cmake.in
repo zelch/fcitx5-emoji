@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2026 Elizabeth Loss-Cutler-Hull
+# SPDX-License-Identifier: LGPL-2.1-or-later
+# Resolve the final prefix at install time, including cmake --install --prefix.
+# DESTDIR stages files but must not become part of the runtime library path.
+set(addon_dir "@EMOJI_ADDONDIR@")
+set(data_dir "@EMOJI_DATADIR@")
+foreach(dir IN ITEMS addon_dir data_dir)
+  if(NOT IS_ABSOLUTE "${${dir}}")
+    set(${dir} "${CMAKE_INSTALL_PREFIX}/${${dir}}")
+  endif()
+endforeach()
+file(READ "@CMAKE_CURRENT_SOURCE_DIR@/data/emoji-picker.conf" descriptor)
+string(REPLACE "Library=libemoji-picker"
+  "Library=${addon_dir}/@EMOJI_LIBRARY_NAME@" descriptor "${descriptor}")
+file(WRITE "@CMAKE_CURRENT_BINARY_DIR@/emoji-picker-user.conf" "${descriptor}")
+file(INSTALL "@CMAKE_CURRENT_BINARY_DIR@/emoji-picker-user.conf"
+  DESTINATION "${data_dir}/addon" RENAME emoji-picker.conf)
