@@ -17,7 +17,7 @@ for line in source.splitlines():
         rows.append({k: json.loads(v) for k, v in re.findall(r'(\w+)=("(?:[^"\\]|\\.)*")', line)})
 by_glyph = {row['emoji']: row for row in rows}
 assert len(by_glyph) == len(rows), 'Duplicate generated sequences'
-assert len([row for row in rows if not row['source']]) == 3624, 'Pinned Unicode catalogue changed'
+assert len([row for row in rows if not row['source']]) == 3963, 'Pinned Unicode catalogue changed'
 def family(*glyphs):
     assert len({by_glyph[g]['family'] for g in glyphs}) == 1, glyphs
 family('🙋', '🙋‍♀️', '🙋🏽‍♂️')
@@ -44,7 +44,13 @@ for row in rows:
     if row['source']:
         assert row['source'] in by_glyph and row['presentation'] == 'Text'
         assert row['family'] == by_glyph[row['source']]['family']
-# Future direction attributes must not misclassify standalone arrows.
+assert by_glyph['\U0001faeb']['name'] == 'cracking face'
+family('\U0001faf9', '\U0001faf9\U0001f3fd')
+assert by_glyph['\U0001faf9\U0001f3fd']['tone'] == '3'
+family('🚶', '🚶‍➡️', '🚶🏽‍♀️‍➡️')
+assert by_glyph['🚶']['direction'] == 'Left'
+assert by_glyph['🚶‍➡️']['direction'] == 'Right'
+# Direction attributes must not misclassify standalone arrows.
 assert generator.attributes('➡️', 'right arrow', 'arrow')['direction'] == ''
 right = generator.attributes('🚶‍➡️', 'person walking facing right', 'person-activity')
 left = generator.attributes('🚶', 'person walking', 'person-activity')

@@ -526,11 +526,11 @@ Upstream: https://github.com/fcitx/fcitx5/blob/master/src/lib/fcitx/tempmodemana
 
 ## Unicode data
 
-The following bundled sources retain their upstream Copyright (c) 2021
+The following bundled sources retain their upstream © 2026
 Unicode, Inc. notices:
 
-- `data/emoji-test-14.0.txt`
-- `data/emoji-variation-sequences-14.0.txt`
+- `data/emoji-test-18.0.txt`
+- `data/emoji-variation-sequences-18.0.txt`
 
 `data/metadata.lua` and `src/countries.inc` are generated from those sources.
 These data files are covered separately by the Unicode license in

@@ -50,8 +50,12 @@ local function load(language)
     local by_glyph = {}
     for _, row in ipairs(rows) do by_glyph[row.emoji] = row end
     for _, item in ipairs(metadata) do
-        if item.source ~= '' and by_glyph[item.source] then
-            rows[#rows + 1] = {emoji=item.emoji, annotations=by_glyph[item.source].annotations}
+        -- Keep the complete pinned catalogue available with older dictionaries.
+        -- Text variants inherit localized annotations from their emoji source.
+        if not seen[item.emoji] then
+            local source = by_glyph[item.source]
+            rows[#rows + 1] = {emoji=item.emoji, annotations=source and source.annotations or {}}
+            seen[item.emoji] = true
         end
     end
     local index, vocabulary = {}, {}

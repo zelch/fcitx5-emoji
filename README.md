@@ -126,9 +126,9 @@ preferences. Unsupported combinations are never synthesized.
 ## Data and scope
 
 `tools/generate_metadata.py` generates `data/metadata.lua` and the flag dropdown
-from pinned Unicode **Emoji 14.0** data, matching the dictionaries in the sibling
-Fcitx checkout. It records family relationships, variant attributes, names, and
-valid text-presentation sequences. Builds and runtime use the committed output
+from pinned Unicode **Emoji 18.0** data (3,963 fully-qualified sequences). It
+records family relationships, variant attributes, names, and valid
+text-presentation sequences. Builds and runtime use the committed output
 and require no downloads. Regenerate it with:
 
 ```sh
@@ -136,10 +136,10 @@ python3 tools/generate_metadata.py
 python3 tools/generate_metadata.py --check
 ```
 
-Emoji 14.0 has no right-facing person variants, so the direction setting has no
-effect on this catalogue. Updating to newer dictionary and metadata versions is
-needed to make those variants available. Unknown emoji in a newer installed
-dictionary remain searchable by annotation, but have no inferred variant
+Right-facing person variants support the direction preference. Emoji missing from
+installed dictionaries are searchable by their canonical English Unicode names;
+localized annotations come from the installed dictionaries. Unknown emoji in a
+newer dictionary remain searchable by annotation, but have no inferred variant
 preferences until metadata is updated. Unicode font support determines how an
 application renders valid emoji and text sequences.
 

@@ -35,6 +35,12 @@ int main(int argc, char **argv) {
             auto annotations = integer();
             for (uint32_t j=0; j<annotations; ++j) string();
         }
+        position(engine.search("cracking face", {}), "\U0001FAEB");
+        position(engine.search("monarch butterfly", {}), "\U0001FACC");
+        auto thumbs = engine.search("leftwards thumb sign", {{"SkinTone","3"}});
+        require(position(thumbs,"\U0001FAF9\U0001F3FD") < position(thumbs,"\U0001FAF9"), "Emoji 18 tone preference");
+        auto walking = engine.search("person walking", {{"Direction","Right"}});
+        require(position(walking,"🚶‍➡️") < position(walking,"🚶"), "Catalogue right-facing preference");
         auto normal = engine.search("cat smil", {{"Language","en"}});
         require(!normal.empty(), "Multiword prefix search");
         position(normal, "😸");
@@ -121,6 +127,13 @@ int main(int argc, char **argv) {
         auto encoded = [&](const std::string &text) { return uint32(text.size()) + text; };
         writeFixture(uint32(2) + encoded("🚶") + uint32(1) + encoded("walking") +
                      encoded("🚶‍➡️") + uint32(1) + encoded("walking"));
+        Engine olderDictionary(root+"/lua/search.lua", root+"/data/metadata.lua", fixture.string());
+        position(olderDictionary.search("cracking face", {}), "\U0001FAEB");
+        position(olderDictionary.search("monarch butterfly", {}), "\U0001FACC");
+        auto catalogue = olderDictionary.search("", {});
+        require(std::count_if(catalogue.begin(), catalogue.end(), [](const auto &row) {
+            return row.first == "🚶‍➡️";
+        }) == 1, "Dictionary and metadata duplicate an emoji");
         auto futureMetadata = fixture / "metadata.lua";
         {
             std::ofstream out(futureMetadata);
